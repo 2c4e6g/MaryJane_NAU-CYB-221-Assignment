@@ -36,13 +36,19 @@ pip install psutil prettytable
 
 Usage
 For full process/PID visibility (recommended):
+
 sudo venv/bin/python3 scanner.py
 
 Filters
+
 sudo venv/bin/python3 scanner.py --tcp     # TCP ports only
+
 sudo venv/bin/python3 scanner.py --udp     # UDP ports only
+
 sudo venv/bin/python3 scanner.py --above 100  # ports > 100
+
 sudo venv/bin/python3 scanner.py --below 1000 # ports < 1000
+
 
 Outputs
 - Terminal: PrettyTable + top security concern summary
@@ -64,8 +70,11 @@ Local Ports Report – 2026-02-28 22:46:40
 +----------+------+---------------+-----+----------+---------+---------+--------+
 
 Reports saved to:
-  TXT: /tmp/ports_report.txt
-  JSON: /tmp/ports_report.json
+
+  - TXT: /tmp/ports_report.txt
+  
+  - JSON: /tmp/ports_report.json
+  
 
 Top ports by security concern:
   UDP 68 (bootpc) – Exposed / Normal – dhclient (PID 111)
