@@ -1,0 +1,41 @@
+Name: Onwurah Onyedikaahi Maryjaned
+Registration Number: 2024924046
+Course Code: NAU-CYB 221
+Level: 200 Level
+Department: Cyber Security
+Faculty: Physical Sciences
+
+Local Port Discovery and Service Identification Report
+NAU-CYB 221 – Cybersecurity Technology
+
+Ports detected and their purpose:
+Running the tool with sudo on ChromeOS Crostini (Linux container) revealed only one bound port:
+
+- UDP 68 bound to 0.0.0.0 by process "dhclient" (PID 111)
+  Purpose: Standard DHCP client port (bootpc service). It must listen on all interfaces to receive broadcast and unicast replies from DHCP servers during IP address assignment, lease renewal, and configuration (RFC 2131). Binding to loopback would prevent the container from obtaining network connectivity.
+
+No TCP listening ports were detected in this scan. Earlier runs showed TCP 3217 (VS Code local server on 127.0.0.1), but it is no longer active—likely because VS Code was closed or the ephemeral server session ended.
+
+Exposed vs local-only classification:
+- UDP 68 → Exposed (0.0.0.0)
+  Practical risk is low in trusted networks (home/campus WiFi). Theoretical threats include rogue DHCP server attacks (spoofed gateway/DNS) or DHCP starvation, but these are mitigated by ChromeOS host-container isolation, NAT, and sandboxing. No direct internet exposure exists.
+
+No high-interest ports (21/FTP, 22/SSH, 23/Telnet, 25/SMTP, 53/DNS, 80/HTTP, 443/HTTPS, 445/SMB, 3389/RDP, etc.) are open. The attack surface is extremely small — typical for a locked-down Crostini container with no persistent services beyond basic networking.
+
+Why ports matter in this context:
+Open ports are the primary reconnaissance target for attackers. They allow fingerprinting of services, version identification, and CVE matching for exploitation. Every exposed port increases the chance of compromise. In this case, the single exposed port is protocol-required and justified for basic connectivity. The complete absence of unnecessary listeners demonstrates strong default hardening in ChromeOS Crostini.
+
+Security controls to reduce risk:
+- Eliminate UDP 68 entirely: Configure static IP in Crostini to disable dhclient.
+  Example commands:
+  nmcli con mod "Linux" ipv4.method manual ipv4.addresses 192.168.1.100/24 ipv4.gateway 192.168.1.1 ipv4.dns 8.8.8.8
+  nmcli con up "Linux"
+- Prevent accidental exposure: In ChromeOS Settings → Linux → Port Forwarding, remove all rules unless explicitly needed.
+- Network-layer defense: Enable ChromeOS VPN on public or untrusted WiFi to encrypt DHCP traffic and block spoofing attempts.
+- Continuous monitoring: Run this tool or `sudo ss -ltnup` weekly to detect any new or unexpected listeners.
+
+Conclusion:
+This defensive port scan shows that visibility is the foundation of security. My system currently has only one explainable port (UDP 68), which is protocol-mandated and carries low real-world risk in a trusted environment. The minimal footprint reflects Crostini’s design philosophy of least functionality and strong isolation. Further reducing even this single port is possible via static IP configuration, which would bring the attack surface effectively to zero.
+
+Ethical note:
+This tool was used exclusively on my personally owned Chromebook. No external IPs were scanned or probed.
