@@ -1,7 +1,7 @@
 # MaryJane_NAU-CYB-221-Assignment
 
-Name: Obi Promise Uche
-Registration Number: 2024924028
+Name: Onwurah Onyedikaahi Maryjaned
+Registration Number: 2024924046
 Course Code: NAU-CYB 221
 Level: 200 Level
 Department: Cyber Security
